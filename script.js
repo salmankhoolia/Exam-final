@@ -98,25 +98,34 @@ document.addEventListener("DOMContentLoaded", function () {
 	*/
 
 	function displayPostsInCarousel(posts) {
-		const slides = Array.from(
-			document.querySelectorAll("[data-slides] > .slide")
-		);
-		const numberOfSlides = slides.length;
+		// const slides = Array.from(
+		// 	document.querySelectorAll("[data-slides] > .slide")
+		// );
+
+		const slidesContainer = document.querySelector("[data-slides]");
+		let slidesContainerInnerHTML = "";
+
+		console.log("slidesContainer", slidesContainer);
+
+		// const numberOfSlides = slides.length;
 		const numberOfPosts = posts.length;
 		const numberOfPostsPerSlide = 4;
 		const numberOfSlidesNeeded = Math.ceil(
 			numberOfPosts / numberOfPostsPerSlide
 		);
-		const numberOfSlidesToDisplay =
-			numberOfSlidesNeeded > numberOfSlides
-				? numberOfSlides
-				: numberOfSlidesNeeded;
+
+		// given numberOfSlidesNeeded, create the correct number of slides
+		const slides = Array.from({ length: numberOfSlidesNeeded }, () => {
+			const slide = document.createElement("li");
+			slide.classList.add("slide");
+			return slide;
+		});
 
 		const numberOfPostsToDisplay =
-			numberOfPostsPerSlide * numberOfSlidesToDisplay;
+			numberOfPostsPerSlide * numberOfSlidesNeeded;
 		const postsToDisplay = posts.slice(0, numberOfPostsToDisplay);
 		const postsPerSlide = Math.ceil(
-			postsToDisplay.length / numberOfSlidesToDisplay
+			postsToDisplay.length / numberOfSlidesNeeded
 		);
 
 		const articles = postsToDisplay.map((post) => {
@@ -130,14 +139,20 @@ document.addEventListener("DOMContentLoaded", function () {
 				articleImg = "";
 			}
 			return `<article class="post">
-      <a href="${post.link}"> ${articleImg}</a>
-      <h2><a href="${post.link}">${post.title.rendered}</a></h2>
-        <div>${post.content.rendered}</div>
-        <div class="readMore"><a href="${post.link}">read more</a></div>
-      </article>`;
+				<a href="${post.link}"> ${articleImg}</a>
+				<h2><a href="${post.link}">${post.title.rendered}</a></h2>
+					<div>${post.content.rendered}</div>
+					<div class="readMore"><a href="${post.link}">read more</a></div>
+				</article>
+			`;
 		});
 
 		const slidesWithArticles = slides.map((slide, index) => {
+			if (index === 0) {
+				// add data-active to first slide
+				slide.setAttribute("data-active", "true");
+				slide.classList.add("active");
+			}
 			const slideArticles = articles.slice(
 				index * postsPerSlide,
 				(index + 1) * postsPerSlide
@@ -154,6 +169,12 @@ document.addEventListener("DOMContentLoaded", function () {
 			slide.classList.remove("active");
 		});
 		slidesWithArticles[0].classList.add("active");
+
+		slidesWithArticles.forEach((slide) => {
+			slidesContainerInnerHTML += slide.outerHTML;
+		});
+
+		slidesContainer.innerHTML = slidesContainerInnerHTML;
 	}
 
 	// function displayBlogPosts(posts) {

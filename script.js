@@ -48,8 +48,20 @@ document.getElementById("search-form").addEventListener("submit", (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-	var blogPostsElement = document.getElementById("last-10-posts");
-	var allPosts = [];
+	let blogPostsElement = document.getElementById("last-10-posts");
+	let morePostsElement = document.getElementById("more-posts-container");
+
+	const seeMoreBtn = document.getElementById("see-more-btn");
+	// hide seeMore when page is loading
+	seeMoreBtn.style.display = "none";
+	// get data-offset attr for seeMoreBtn
+	let seeMoreBtnOffset = seeMoreBtn?.getAttribute("data-offset");
+
+	// on click seeMoreBtn, fetch more posts
+	seeMoreBtn?.addEventListener("click", function (e) {
+		e.preventDefault();
+		fetchLast10Posts(morePostsElement, 10, seeMoreBtnOffset);
+	});
 
 	const isHomePage = document.body.id === "homePage" ? true : false;
 	const isBlogPage = document.body.id === "blogPage" ? true : false;
@@ -128,13 +140,24 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
-	function displayBlogPosts(posts) {
-		blogPostsElement.innerHTML = "";
+	function displayBlogPosts(containerElement, posts, offset) {
+		containerElement.innerHTML = "";
 
 		posts.forEach(function (post) {
 			var postElement = createPostElement(post);
-			blogPostsElement.appendChild(postElement);
+			containerElement.appendChild(postElement);
 		});
+
+		updateSeeMoreBtnOffset(offset, posts.length);
+	}
+
+	function updateSeeMoreBtnOffset(offset, numberOfPosts) {
+		seeMoreBtn.style.display = "block";
+		seeMoreBtnOffset = parseInt(offset) + 10;
+		seeMoreBtn.setAttribute("data-offset", seeMoreBtnOffset);
+		if (numberOfPosts < 10) {
+			seeMoreBtn.style.display = "none";
+		}
 	}
 
 	function createPostElement(post) {
@@ -189,27 +212,34 @@ document.addEventListener("DOMContentLoaded", function () {
 		return postElement;
 	}
 
-	function fetchLast10Posts() {
-		fetchBlogPosts(10);
+	function fetchLast10Posts(container, count = 10, offset = 0) {
+		fetchBlogPosts(container, count, offset);
 	}
 
-	function fetchBlogPosts(count = null) {
+	function fetchBlogPosts(
+		container = blogPostsElement,
+		count = null,
+		offset = 0
+	) {
 		let fetchURL = "http://exam.local/wp-json/wp/v2/posts?_embed";
 		if (count) {
 			fetchURL += "&per_page=" + count;
+		} else {
+			fetchURL += "&per_page=100";
+		}
+		if (offset > 0) {
+			fetchURL += "&offset=" + offset;
 		}
 		fetch(fetchURL)
 			.then(function (response) {
 				return response.json();
 			})
 			.then(function (posts) {
-				allPosts = posts;
-				console.log("🚀 ~ file: script.js:238 ~ allPosts:", allPosts);
 				if (isHomePage) {
-					displayPostsInCarousel(allPosts);
+					displayPostsInCarousel(posts);
 				}
 				if (isBlogPage) {
-					displayBlogPosts(allPosts);
+					displayBlogPosts(container, posts, offset);
 				}
 			})
 			.catch(function (error) {
@@ -223,6 +253,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	// check if body has blogPage id
 	if (document.body.id === "blogPage") {
-		fetchLast10Posts();
+		fetchLast10Posts(blogPostsElement, 10, 0);
 	}
 });

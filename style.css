@@ -278,7 +278,7 @@ h1 {
 	place-self: center;
 }
 
-#see-more {
+#see-more-btn {
 	width: 200px;
 	font-family: var(--additional-font2);
 	background-color: var(--background-color);
@@ -290,7 +290,7 @@ h1 {
 	height: 50px;
 	place-self: center;
 	position: relative;
-	bottom: 100px;
+	/* bottom: 100px; */
 }
 
 /* .effect {

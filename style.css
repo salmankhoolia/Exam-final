@@ -293,7 +293,7 @@ h1 {
 	bottom: 100px;
 }
 
-.effect {
+/* .effect {
 	-webkit-mask-image: -webkit-gradient(
 		linear,
 		left top,
@@ -301,8 +301,7 @@ h1 {
 		from(rgba(0, 0, 0, 1)),
 		to(rgba(0, 0, 0, 0))
 	);
-	/* Add any other styles related to the effect */
-}
+} */
 
 .article-single {
 	display: grid;

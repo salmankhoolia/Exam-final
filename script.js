@@ -47,67 +47,17 @@ document.getElementById("search-form").addEventListener("submit", (e) => {
 	filterBlogPosts();
 });
 
-// const seeMoreButton = document.getElementById("see-more");
-// const seeLessButton = document.getElementById("see-less");
-// const blogPosts = document.getElementById("blog-posts");
-
-// seeMoreButton.addEventListener("click", () => {
-// 	blogPosts.classList.remove("effect");
-// });
-
-// seeLessButton.addEventListener("click", () => {
-// 	blogPosts.classList.add("effect");
-// });
-
 document.addEventListener("DOMContentLoaded", function () {
-	// var blogPostsElement = document.getElementById("blog-posts");
-	// var seeMoreButton = document.getElementById("see-more");
-	// var seeLessButton = document.getElementById("see-less");
+	var blogPostsElement = document.getElementById("last-10-posts");
 	var allPosts = [];
-	// var displayCount = 3;
 
-	/*given html for carousel:
-	<ul data-slides>
-	<li class="slide" data-active>
-	<div class="articleContainer">
-    <artcile class="post">
-      <h2>Post title</h2>
-      <div>Post content</div>
-    </artcile>
-    <artcile class="post">
-      <h2>Post title</h2>
-      <div>Post content</div>
-    </artcile>
-    <artcile class="post">
-      <h2>Post title</h2>
-      <div>Post content</div>
-    </artcile>
-    <artcile class="post">
-      <h2>Post title</h2>
-      <div>Post content</div>
-    </artcile>
-  </div>
-	</li>
-	<li class="slide">
-  ...
-	</li>
-	...
-	</ul>
-  write a function that will take an array of posts and display them in the carousel
-  each slide should contain 4 posts
-	*/
+	const isHomePage = document.body.id === "homePage" ? true : false;
+	const isBlogPage = document.body.id === "blogPage" ? true : false;
 
 	function displayPostsInCarousel(posts) {
-		// const slides = Array.from(
-		// 	document.querySelectorAll("[data-slides] > .slide")
-		// );
-
 		const slidesContainer = document.querySelector("[data-slides]");
 		let slidesContainerInnerHTML = "";
 
-		console.log("slidesContainer", slidesContainer);
-
-		// const numberOfSlides = slides.length;
 		const numberOfPosts = posts.length;
 		const numberOfPostsPerSlide = 4;
 		const numberOfSlidesNeeded = Math.ceil(
@@ -173,82 +123,106 @@ document.addEventListener("DOMContentLoaded", function () {
 		slidesWithArticles.forEach((slide) => {
 			slidesContainerInnerHTML += slide.outerHTML;
 		});
-
-		slidesContainer.innerHTML = slidesContainerInnerHTML;
+		if (slidesContainer) {
+			slidesContainer.innerHTML = slidesContainerInnerHTML;
+		}
 	}
 
-	// function displayBlogPosts(posts) {
-	// 	blogPostsElement.innerHTML = "";
+	function displayBlogPosts(posts) {
+		blogPostsElement.innerHTML = "";
 
-	// 	posts.forEach(function (post, index) {
-	// 		var postElement = createPostElement(post);
-	// 		blogPostsElement.appendChild(postElement);
-
-	// 		if (index >= displayCount) {
-	// 			postElement.style.display = "none";
-	// 		}
-	// 	});
-
-	// 	if (posts.length > displayCount) {
-	// 		seeMoreButton.style.display = "block";
-	// 	} else {
-	// 		seeMoreButton.style.display = "none";
-	// 	}
-
-	// 	seeLessButton.style.display = "none";
-	// }
+		posts.forEach(function (post) {
+			var postElement = createPostElement(post);
+			blogPostsElement.appendChild(postElement);
+		});
+	}
 
 	function createPostElement(post) {
-		var postElement = document.createElement("div");
+		const hasFeaturedImage = post._embedded["wp:featuredmedia"]
+			? true
+			: false;
+
+		let articleImgElement;
+
+		const postElement = document.createElement("article");
 		postElement.classList.add("post");
+		postElement.classList.add("article-single");
 
-		var imageElement = document.createElement("img");
-		imageElement.src = "./Image/ReadMore.png";
-		imageElement.alt = post.title.rendered;
+		if (hasFeaturedImage) {
+			articleImgElement = document.createElement("figure");
+			articleImgElement.classList.add("articleImg");
+			// if there is a featured image, add it to the post
+			const src = post._embedded["wp:featuredmedia"][0].source_url;
+			const alt = post._embedded["wp:featuredmedia"][0].alt_text;
+			const imgElement = document.createElement("img");
+			imgElement.src = src;
+			imgElement.alt = alt;
 
-		var titleElement = document.createElement("h2");
+			articleImgElement.appendChild(imgElement);
+		}
+
+		const articleContentElement = document.createElement("div");
+		articleContentElement.classList.add("articleContent");
+
+		const titleElement = document.createElement("h2");
 		titleElement.textContent = post.title.rendered;
 
-		var contentElement = document.createElement("div");
+		const contentElement = document.createElement("div");
 		contentElement.innerHTML = post.content.rendered;
 
-		postElement.appendChild(imageElement);
-		postElement.appendChild(titleElement);
-		postElement.appendChild(contentElement);
+		const readMoreElement = document.createElement("div");
+		readMoreElement.classList.add("readMore");
+		const readMoreLink = document.createElement("a");
+		readMoreLink.href = post.link;
+		readMoreLink.textContent = "read more";
+		readMoreElement.appendChild(readMoreLink);
+
+		articleContentElement.appendChild(titleElement);
+		articleContentElement.appendChild(contentElement);
+		articleContentElement.appendChild(readMoreElement);
+
+		postElement.appendChild(articleContentElement);
+		if (hasFeaturedImage) {
+			postElement.appendChild(articleImgElement);
+		}
 
 		return postElement;
 	}
 
-	function fetchBlogPosts() {
-		fetch("http://exam.local/wp-json/wp/v2/posts?_embed")
+	function fetchLast10Posts() {
+		fetchBlogPosts(10);
+	}
+
+	function fetchBlogPosts(count = null) {
+		let fetchURL = "http://exam.local/wp-json/wp/v2/posts?_embed";
+		if (count) {
+			fetchURL += "&per_page=" + count;
+		}
+		fetch(fetchURL)
 			.then(function (response) {
 				return response.json();
 			})
 			.then(function (posts) {
 				allPosts = posts;
-				// displayBlogPosts(allPosts);
-				displayPostsInCarousel(allPosts);
+				console.log("🚀 ~ file: script.js:238 ~ allPosts:", allPosts);
+				if (isHomePage) {
+					displayPostsInCarousel(allPosts);
+				}
+				if (isBlogPage) {
+					displayBlogPosts(allPosts);
+				}
 			})
 			.catch(function (error) {
 				console.log("Error fetching blog posts:", error);
 			});
 	}
 
-	// seeMoreButton.addEventListener("click", function () {
-	// 	displayCount = allPosts.length;
-	// 	// displayBlogPosts(allPosts);
-
-	// 	seeMoreButton.style.display = "none";
-	// 	seeLessButton.style.display = "block";
-	// });
-
-	// seeLessButton.addEventListener("click", function () {
-	// 	displayCount = 3;
-	// 	// displayBlogPosts(allPosts);
-
-	// 	seeMoreButton.style.display = "block";
-	// 	seeLessButton.style.display = "none";
-	// });
-
-	fetchBlogPosts();
+	// check if is homePage
+	if (document.body.id === "homePage") {
+		fetchBlogPosts();
+	}
+	// check if body has blogPage id
+	if (document.body.id === "blogPage") {
+		fetchLast10Posts();
+	}
 });

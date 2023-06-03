@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>My Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./footer.css">
+  <script defer src="./script.js"></script>
+  <script defer src="./product.js"></script>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <img class="logo" src="./Image/Skjermbilde_2023-03-08_131504-removebg-preview.png" alt="">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="product.html">Products</a></li>
+      </ul>
+      <div class="right-items">
+        <div class="search-box" id="search-box">
+          <form id="search-form">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button type="submit">Search</button>
+          </form>
+        </div>
+        <div class="search-icon" onclick="toggleSearchBox()">
+          <i class="fas fa-search"></i>
+        </div>
+        <a href="#">Sign In</a>
+        <i class="fas fa-user"></i>
+        <a href="#" class="add-to-cart">
+          Add to Cart
+          <span class="icon">&#128722;</span>
+        </a>
+      </div>
+
+      <div class="burger" onclick="toggleNav()">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <style>
+      /* Add any desired CSS styles for the product display */
+      .product {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .product h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .product p {
+        margin: 0;
+      }
+    </style>
+    <div id="productList"></div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./contact.css">
+    <script src="./contact.js" defer></script>
+    <title>Contact</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+          <div class="logo">My Website</div>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+          <div class="right-items">
+            <a href="#">Sign In</a>
+            <a href="#" class="search-icon">&#x1F50D;</a>
+          </div>
+
+          <div class="burger" onclick="toggleNav()">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+          </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Contact Us</h1>
+        <div id="success-notification" class="notification">Your message was sent</div>
+
+        <form id="contact-form">
+            <div class="form-group">
+                <input type="text" id="first-name" name="first-name" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="last-name" name="last-name" placeholder="Last Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="phone" name="phone" placeholder="Phone Number" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="subject" name="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group">
+                <textarea id="message" name="message" placeholder="Message" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit">Send Message</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="contact.js"></script>
+</body>
+</html>

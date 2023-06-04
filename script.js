@@ -317,7 +317,6 @@ document.addEventListener("DOMContentLoaded", function () {
 				return response.json();
 			})
 			.then(function (comments) {
-				console.log("🚀 ~ file: script.js:311 ~ comments:", comments);
 				if (comments.length === 0) {
 					commentsContainerTitle.style.display = "none";
 				} else {
@@ -360,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// coments for single posts
 	const commentForm = document.getElementById("commentForm");
 	//onsubmit event
-	commentForm.addEventListener("submit", function (event) {
+	commentForm?.addEventListener("submit", function (event) {
 		event.preventDefault();
 		const commentData = JSON.stringify({
 			post: postId,

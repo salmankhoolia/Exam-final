@@ -262,6 +262,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	// for single post page in post.html?id=xxx
 	const singleArticleContainer = document.getElementById("single-article");
 
+	function updatePageTitle(title) {
+		document.title = document.title.replace("default title", title);
+	}
+
 	function getPostIDFromURL() {
 		let params = new URLSearchParams(document.location.search.substring(1));
 		return params.get("id");
@@ -278,6 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			.then(function (post) {
 				const postElement = createPostElement(post, false);
 				singleArticleContainer.appendChild(postElement);
+				updatePageTitle(post.title.rendered);
 			})
 			.catch(function (error) {
 				console.log("Error fetching blog post:", error);

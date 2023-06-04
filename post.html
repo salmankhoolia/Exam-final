@@ -47,6 +47,17 @@
 
     <div class="container">
         <div id="single-article"></div>
+        <!-- comment form fot the post. it uses need attributes for wp api  -->
+        <div id="comments-container"></div>
+        <div class="formContainer articleComment">
+            <form id="commentForm">
+                <h3>Leave a comment</h3>
+                <input type="text" name="author" id="author" placeholder="Name" required>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                <textarea name="comment" id="comment" cols="30" rows="10" placeholder="Comment" required></textarea>
+                <input type="submit" value="Submit" id="submitComment">
+            </form>
+        </div>
     </div>
 
     <footer>

@@ -261,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// for single post page in post.html?id=xxx
 	const singleArticleContainer = document.getElementById("single-article");
+	const commentsContainer = document.getElementById("comments-container");
 
 	function updatePageTitle(title) {
 		document.title = document.title.replace("default title", title);
@@ -271,6 +272,56 @@ document.addEventListener("DOMContentLoaded", function () {
 		return params.get("id");
 	}
 
+	function createCommentElement(comment) {
+		console.log(
+			"🚀 ~ file: script.js:276 ~ createCommentElement ~ comment:",
+			comment
+		);
+		const commentElement = document.createElement("div");
+		commentElement.classList.add("comment");
+
+		// comment author
+		const commentAuthorElement = document.createElement("div");
+		commentAuthorElement.classList.add("comment-author");
+		commentAuthorElement.innerHTML = comment.author_name;
+
+		// comment content
+		const commentContentElement = document.createElement("div");
+		commentContentElement.classList.add("comment-content");
+		commentContentElement.innerHTML = comment.content.rendered;
+
+		commentElement.appendChild(commentAuthorElement);
+		commentElement.appendChild(commentContentElement);
+
+		return commentElement;
+	}
+
+	function fetchCommentsByPostID(id) {
+		console.log(
+			"🚀 ~ file: script.js:297 ~ fetchCommentsByPostID ~ id:",
+			id
+		);
+		let fetchURL =
+			"http://exam.local/wp-json/wp/v2/comments?post=" + id + "&_embed";
+
+		return fetch(fetchURL)
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (comments) {
+				comments.forEach(function (comment) {
+					const commentElement = createCommentElement(comment);
+					console.log(
+						"🚀 ~ file: script.js:312 ~ commentElement:",
+						commentElement
+					);
+					commentsContainer.appendChild(commentElement);
+				});
+			})
+			.catch(function (error) {
+				console.log("Error fetching comments:", error);
+			});
+	}
 	function fetchPostByID(id) {
 		let fetchURL =
 			"http://exam.local/wp-json/wp/v2/posts/" + id + "?_embed";
@@ -292,5 +343,35 @@ document.addEventListener("DOMContentLoaded", function () {
 	const postId = getPostIDFromURL();
 	if (postId) {
 		fetchPostByID(postId);
+		fetchCommentsByPostID(postId);
 	}
+
+	// coments for single posts
+	const commentForm = document.getElementById("commentForm");
+	//onsubmit event
+	commentForm.addEventListener("submit", function (event) {
+		event.preventDefault();
+		const commentData = JSON.stringify({
+			post: postId,
+			author_name: commentForm.author.value,
+			author_email: commentForm.email.value,
+			content: commentForm.comment.value,
+		});
+		fetch("http://exam.local/wp-json/wp/v2/comments", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: commentData,
+		})
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (comment) {
+				console.log(comment);
+			})
+			.catch(function (error) {
+				console.log("Error creating comment:", error);
+			});
+	});
 });

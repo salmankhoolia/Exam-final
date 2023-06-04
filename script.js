@@ -50,7 +50,6 @@ document.getElementById("search-form").addEventListener("submit", (e) => {
 document.addEventListener("DOMContentLoaded", function () {
 	let blogPostsElement = document.getElementById("last-10-posts");
 	let morePostsElement = document.getElementById("more-posts-container");
-
 	const seeMoreBtn = document.getElementById("see-more-btn");
 	if (seeMoreBtn) {
 		// hide seeMore when page is loading
@@ -71,8 +70,13 @@ document.addEventListener("DOMContentLoaded", function () {
 		const slidesContainer = document.querySelector("[data-slides]");
 		let slidesContainerInnerHTML = "";
 
+		const screenWidth = screen.width;
+
 		const numberOfPosts = posts.length;
-		const numberOfPostsPerSlide = 4;
+		let numberOfPostsPerSlide = 4;
+		if (screenWidth <= 768) {
+			numberOfPostsPerSlide = 1;
+		}
 		const numberOfSlidesNeeded = Math.ceil(
 			numberOfPosts / numberOfPostsPerSlide
 		);
@@ -101,10 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			} else {
 				articleImg = "";
 			}
-			return `<article class="post">
-				<a href="post.html?id=${post.id}"> ${articleImg}</a>
-				<h2><a href="post.html?id=${post.id}">${post.title.rendered}</a></h2>
-					<div>${post.content.rendered}</div>
+			return `<article class="post arctileCarousel">
+					<a href="post.html?id=${post.id}"> ${articleImg}</a>
+					<h3><a href="post.html?id=${post.id}">${post.title.rendered}</a></h3>
+					<div class="articleContent">${post.content.rendered}</div>
 					<div class="readMore"><a href="post.html?id=${post.id}">read more</a></div>
 				</article>
 			`;

@@ -52,17 +52,18 @@ document.addEventListener("DOMContentLoaded", function () {
 	let morePostsElement = document.getElementById("more-posts-container");
 
 	const seeMoreBtn = document.getElementById("see-more-btn");
-	// hide seeMore when page is loading
-	seeMoreBtn.style.display = "none";
-	// get data-offset attr for seeMoreBtn
-	let seeMoreBtnOffset = seeMoreBtn?.getAttribute("data-offset");
+	if (seeMoreBtn) {
+		// hide seeMore when page is loading
+		seeMoreBtn.style.display = "none";
+		// get data-offset attr for seeMoreBtn
+		let seeMoreBtnOffset = seeMoreBtn.getAttribute("data-offset");
 
-	// on click seeMoreBtn, fetch more posts
-	seeMoreBtn?.addEventListener("click", function (e) {
-		e.preventDefault();
-		fetchLast10Posts(morePostsElement, 10, seeMoreBtnOffset);
-	});
-
+		// on click seeMoreBtn, fetch more posts
+		seeMoreBtn?.addEventListener("click", function (e) {
+			e.preventDefault();
+			fetchLast10Posts(morePostsElement, 10, seeMoreBtnOffset);
+		});
+	}
 	const isHomePage = document.body.id === "homePage" ? true : false;
 	const isBlogPage = document.body.id === "blogPage" ? true : false;
 
@@ -101,10 +102,10 @@ document.addEventListener("DOMContentLoaded", function () {
 				articleImg = "";
 			}
 			return `<article class="post">
-				<a href="${post.link}"> ${articleImg}</a>
-				<h2><a href="${post.link}">${post.title.rendered}</a></h2>
+				<a href="post.html?id=${post.id}"> ${articleImg}</a>
+				<h2><a href="post.html?id=${post.id}">${post.title.rendered}</a></h2>
 					<div>${post.content.rendered}</div>
-					<div class="readMore"><a href="${post.link}">read more</a></div>
+					<div class="readMore"><a href="post.html?id=${post.id}">read more</a></div>
 				</article>
 			`;
 		});
@@ -160,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
-	function createPostElement(post) {
+	function createPostElement(post, seeMore = true) {
 		const hasFeaturedImage = post._embedded["wp:featuredmedia"]
 			? true
 			: false;
@@ -193,16 +194,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		const contentElement = document.createElement("div");
 		contentElement.innerHTML = post.content.rendered;
 
-		const readMoreElement = document.createElement("div");
-		readMoreElement.classList.add("readMore");
-		const readMoreLink = document.createElement("a");
-		readMoreLink.href = post.link;
-		readMoreLink.textContent = "read more";
-		readMoreElement.appendChild(readMoreLink);
-
 		articleContentElement.appendChild(titleElement);
 		articleContentElement.appendChild(contentElement);
-		articleContentElement.appendChild(readMoreElement);
+
+		if (seeMore) {
+			const readMoreElement = document.createElement("div");
+			readMoreElement.classList.add("readMore");
+			const readMoreLink = document.createElement("a");
+			readMoreLink.href = `post.html?id=${post.id}`;
+			readMoreLink.textContent = "read more";
+			readMoreElement.appendChild(readMoreLink);
+			articleContentElement.appendChild(readMoreElement);
+		}
 
 		postElement.appendChild(articleContentElement);
 		if (hasFeaturedImage) {
@@ -254,5 +257,35 @@ document.addEventListener("DOMContentLoaded", function () {
 	// check if body has blogPage id
 	if (document.body.id === "blogPage") {
 		fetchLast10Posts(blogPostsElement, 10, 0);
+	}
+
+	// for single post page in post.html?id=xxx
+	const singleArticleContainer = document.getElementById("single-article");
+
+	function getPostIDFromURL() {
+		let params = new URLSearchParams(document.location.search.substring(1));
+		return params.get("id");
+	}
+
+	function fetchPostByID(id) {
+		let fetchURL =
+			"http://exam.local/wp-json/wp/v2/posts/" + id + "?_embed";
+
+		return fetch(fetchURL)
+			.then(function (response) {
+				return response.json();
+			})
+			.then(function (post) {
+				const postElement = createPostElement(post, false);
+				singleArticleContainer.appendChild(postElement);
+			})
+			.catch(function (error) {
+				console.log("Error fetching blog post:", error);
+			});
+	}
+
+	const postId = getPostIDFromURL();
+	if (postId) {
+		fetchPostByID(postId);
 	}
 });

@@ -394,3 +394,25 @@ h1 {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 }
+
+#commentForm {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 20px;
+}
+
+#commentForm h3,
+#commentForm textarea {
+	grid-column: 1/-1;
+}
+
+#commentForm input {
+	padding: 10px;
+}
+
+.post.comment {
+	margin-bottom: 10px;
+}
+.comment-author span {
+	margin-left: 20px;
+}

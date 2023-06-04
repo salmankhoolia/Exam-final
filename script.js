@@ -262,6 +262,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	// for single post page in post.html?id=xxx
 	const singleArticleContainer = document.getElementById("single-article");
 	const commentsContainer = document.getElementById("comments-container");
+	const commentsContainerTitle = document.getElementById(
+		"comments-container-title"
+	);
 
 	function updatePageTitle(title) {
 		document.title = document.title.replace("default title", title);
@@ -272,18 +275,27 @@ document.addEventListener("DOMContentLoaded", function () {
 		return params.get("id");
 	}
 
+	function parseDate(date) {
+		const parts = date.split("T");
+		return parts[0];
+	}
+
 	function createCommentElement(comment) {
-		console.log(
-			"🚀 ~ file: script.js:276 ~ createCommentElement ~ comment:",
-			comment
-		);
-		const commentElement = document.createElement("div");
+		const commentElement = document.createElement("article");
+		commentElement.classList.add("post");
 		commentElement.classList.add("comment");
 
 		// comment author
 		const commentAuthorElement = document.createElement("div");
 		commentAuthorElement.classList.add("comment-author");
 		commentAuthorElement.innerHTML = comment.author_name;
+
+		// comment date
+		const commentDateElement = document.createElement("span");
+		commentDateElement.classList.add("comment-date");
+		commentDateElement.innerHTML = parseDate(comment.date);
+
+		commentAuthorElement.appendChild(commentDateElement);
 
 		// comment content
 		const commentContentElement = document.createElement("div");
@@ -297,10 +309,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	function fetchCommentsByPostID(id) {
-		console.log(
-			"🚀 ~ file: script.js:297 ~ fetchCommentsByPostID ~ id:",
-			id
-		);
 		let fetchURL =
 			"http://exam.local/wp-json/wp/v2/comments?post=" + id + "&_embed";
 
@@ -309,12 +317,15 @@ document.addEventListener("DOMContentLoaded", function () {
 				return response.json();
 			})
 			.then(function (comments) {
+				console.log("🚀 ~ file: script.js:311 ~ comments:", comments);
+				if (comments.length === 0) {
+					commentsContainerTitle.style.display = "none";
+				} else {
+					commentsContainerTitle.style.display = "block";
+				}
 				comments.forEach(function (comment) {
 					const commentElement = createCommentElement(comment);
-					console.log(
-						"🚀 ~ file: script.js:312 ~ commentElement:",
-						commentElement
-					);
+
 					commentsContainer.appendChild(commentElement);
 				});
 			})
@@ -369,6 +380,14 @@ document.addEventListener("DOMContentLoaded", function () {
 			})
 			.then(function (comment) {
 				console.log(comment);
+				// clear form
+				commentForm.author.value = "";
+				commentForm.email.value = "";
+				commentForm.comment.value = "";
+
+				// update CommentsContainer
+				const commentElement = createCommentElement(comment);
+				commentsContainer.appendChild(commentElement);
 			})
 			.catch(function (error) {
 				console.log("Error creating comment:", error);

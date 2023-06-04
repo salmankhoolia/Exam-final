@@ -278,7 +278,8 @@ h1 {
 	place-self: center;
 }
 
-#see-more-btn {
+#see-more-btn,
+#submitComment {
 	width: 200px;
 	font-family: var(--additional-font2);
 	background-color: var(--background-color);
@@ -291,6 +292,10 @@ h1 {
 	place-self: center;
 	position: relative;
 	/* bottom: 100px; */
+}
+
+#submitComment {
+	place-self: start;
 }
 
 /* .effect {

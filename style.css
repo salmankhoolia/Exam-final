@@ -4,8 +4,8 @@
 	--background-color: #ffffff;
 	--text-color: #333333;
 	--accent-color: #66cc99;
-	--additional-color1: #993366; /* A deep shade of purple */
-	--additional-color2: #ffcc00; /* A bright shade of yellow */
+	--additional-color1: #993366;
+	--additional-color2: #ffcc00;
 
 	--heading-font: "Lato", sans-serif;
 	--body-font: "Open Sans", sans-serif;
@@ -20,6 +20,7 @@
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	text-decoration: none;
 }
 
 body {
@@ -144,29 +145,27 @@ body {
 }
 
 .container {
-	display: grid;
 	max-width: 960px;
 	margin: 0 auto;
-	padding: 20px;
-	justify-content: center; /* Center horizontally */
-	align-items: center; /* Center vertically */
+	text-align: center;
 }
+
+
 
 .banner-slide {
 	margin-top: 50px;
 	/* background-color: #66cc99; */
-	height: 100%;
+	height: 80%;
 }
 
 .carousel {
 	/* background-color: #993366; */
 	margin: 0 auto;
 	width: 90%;
-	height: 100%; /* Adjust the height as needed */
-	position: relative;
+	height: 90%;
 }
 
-.carousel > ul {
+.carousel>ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -182,7 +181,7 @@ body {
 	transition-delay: 200ms;
 }
 
-.slide > img {
+.slide>img {
 	display: block;
 	width: 100%;
 	height: 100%;
@@ -252,34 +251,118 @@ body {
 }
 
 .dot.active {
-	background-color: #ff8c00; /* Update with your desired color */
-	transform: scale(1.2); /* Add a scale transformation to make it larger */
+	background-color: #ff8c00;
+	transform: scale(1.2);
 }
 
 h1 {
 	text-align: center;
 }
 
-#blog-posts {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-gap: 20px;
-	cursor: pointer;
+.subscription-section {
+	background-color: rgb(138, 138, 172);
+	padding: 40px 0;
+	margin-top: 20px;
+  }
+
+  .subscription-container {
+	max-width: 960px;
+	margin: 0 auto;
+	text-align: center;
+  }
+
+  .subscription-container h3 {
+	color: white;
+	font-size: 24px;
+	margin-bottom: 20px;
+  }
+
+  .subscription-form {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+  }
+
+  .subscription-form input[type="email"] {
+	padding: 10px;
+	width: 300px;
+	border-radius: 4px;
+	border: none;
+	margin-right: 10px;
+  }
+
+  .subscription-form button {
+	padding: 10px 20px;
+	border-radius: 4px;
+	border: none;
+	background-color: var(--accent-color);
+	font-weight: bold;
+  }
+
+  .subscription-form button:hover {
+	background-color: #f2f2f2;
+  }
+
+  .subscription-message {
+	color: white;
+	font-size: 18px;
+	margin-top: 20px;
 }
 
-#see-less {
-	display: none;
-	width: 200px;
-	font-family: var(--additional-font2);
-	background-color: var(--background-color);
-	border: none;
-	box-shadow: 1px 1px 5px 1px var(--text-color);
-	cursor: pointer;
-	font-weight: 600;
-	font-size: 20px;
-	height: 50px;
-	place-self: center;
+footer {
+	background-color: #f2f2f2;
+	padding: 20px;
+	margin-top: 30px;
+	text-align: center;
 }
+
+#blog-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+    cursor: pointer;
+  }
+
+
+  #see-more {
+    width: 200px;
+    font-family: var(--additional-font2);
+    background-color: var(--background-color);
+    border: none;
+    box-shadow: 1px 1px 5px 1px var(--text-color);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 20px;
+    height: 50px;
+    place-self: center;
+    position: relative;
+    bottom: 100px;
+}
+
+  .effect {
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    /* Add any other styles related to the effect */
+  }
+
+  .center-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
 
 #see-more-btn,
 #submitComment {
@@ -337,9 +420,13 @@ h1 {
 
 .post {
 	background-color: #f1f1f1;
+	font-family: var(--additional-font2);
 	padding: 20px;
 	border-radius: 8px;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	margin: 10px;
+	justify-items: center;
+	box-shadow: 1px 1px 10px 1px var(--text-color);
+	text-align: center;
 }
 
 .post img {
@@ -349,12 +436,14 @@ h1 {
 	border-radius: 8px;
 }
 
-.post h2 {
-	margin-top: 10px;
-	margin-bottom: 5px;
+.post a {
+	color: var(--text-color);
 }
 
+
+
 .post div {
+	margin: 15px;
 	font-size: 14px;
 }
 
@@ -381,15 +470,15 @@ h1 {
 .post.comment {
 	margin-bottom: 10px;
 }
+
 .comment-author span {
 	margin-left: 20px;
 }
 
-@media screen and (max-width: 768px) {
-	.slide .articleContainer {
-		grid-template-columns: 1fr;
-	}
+.post img {
+	aspect-ratio: 13/13;
 }
+
 
 @media screen and (max-width: 768px) {
 	.navbar {
@@ -459,5 +548,17 @@ h1 {
 
 	#commentForm {
 		grid-template-columns: 1fr;
+	}
+
+	.slide .articleContainer {
+		grid-template-columns: 1fr;
+	}
+
+	.post img {
+		aspect-ratio: 14/6;
+	}
+
+	.car-btn {
+		font-size: 3rem;
 	}
 }

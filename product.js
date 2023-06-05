@@ -1,4 +1,3 @@
-// Function to fetch product data from the WordPress API
 async function fetchProducts() {
 	const admin = {
 		consumerKey: "ck_e454991256b7aad537034251843463b7fd9c3d53",
@@ -9,7 +8,7 @@ async function fetchProducts() {
 		consumerKey: "ck_b899e4bea861cc679a76c4a1dfbc17801bf094d7",
 		consumerSecret: "cs_50ad099ccc782c833b0a135e0e539c34134bc81f",
 	};
-	const url = "http://exam.local/wp-json/wc/v3/products";
+	const url = "http://salmankhoolia.local//wp-json/wc/v3/products";
 	const consumerKey = "ck_b899e4bea861cc679a76c4a1dfbc17801bf094d7";
 	const consumerSecret = "cs_50ad099ccc782c833b0a135e0e539c34134bc81f";
 
@@ -21,17 +20,13 @@ async function fetchProducts() {
 	return products;
 }
 
-// Function to display the fetched products on the HTML page
 function displayProducts(products) {
 	console.log("Received products:", products);
 	const productList = document.getElementById("productList");
 
-	// Clear any existing content
 	productList.innerHTML = "";
 
-	// Check if products is an array
 	if (Array.isArray(products)) {
-		// Loop through the products and create HTML elements for each product
 		products.forEach((product) => {
 			const productElement = document.createElement("div");
 			productElement.classList.add("product");
@@ -51,7 +46,6 @@ function displayProducts(products) {
 	}
 }
 
-// Fetch and display the products
 fetchProducts()
 	.then((products) => {
 		displayProducts(products);

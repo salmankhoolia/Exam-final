@@ -52,12 +52,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	let morePostsElement = document.getElementById("more-posts-container");
 	const seeMoreBtn = document.getElementById("see-more-btn");
 	if (seeMoreBtn) {
-		// hide seeMore when page is loading
 		seeMoreBtn.style.display = "none";
-		// get data-offset attr for seeMoreBtn
 		let seeMoreBtnOffset = seeMoreBtn.getAttribute("data-offset");
 
-		// on click seeMoreBtn, fetch more posts
 		seeMoreBtn?.addEventListener("click", function (e) {
 			e.preventDefault();
 			fetchLast10Posts(morePostsElement, 10, seeMoreBtnOffset);
@@ -81,7 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			numberOfPosts / numberOfPostsPerSlide
 		);
 
-		// given numberOfSlidesNeeded, create the correct number of slides
 		const slides = Array.from({ length: numberOfSlidesNeeded }, () => {
 			const slide = document.createElement("li");
 			slide.classList.add("slide");
@@ -116,7 +112,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		const slidesWithArticles = slides.map((slide, index) => {
 			if (index === 0) {
-				// add data-active to first slide
 				slide.setAttribute("data-active", "true");
 				slide.classList.add("active");
 			}
@@ -179,7 +174,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (hasFeaturedImage) {
 			articleImgElement = document.createElement("figure");
 			articleImgElement.classList.add("articleImg");
-			// if there is a featured image, add it to the post
 			const src = post._embedded["wp:featuredmedia"][0].source_url;
 			const alt = post._embedded["wp:featuredmedia"][0].alt_text;
 			const imgElement = document.createElement("img");
@@ -228,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		count = null,
 		offset = 0
 	) {
-		let fetchURL = "http://exam.local/wp-json/wp/v2/posts?_embed";
+		let fetchURL = "http://salmankhoolia.local/wp-json/wp/v2/posts?_embed";
 		if (count) {
 			fetchURL += "&per_page=" + count;
 		} else {
@@ -254,16 +248,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			});
 	}
 
-	// check if is homePage
 	if (document.body.id === "homePage") {
 		fetchBlogPosts();
 	}
-	// check if body has blogPage id
 	if (document.body.id === "blogPage") {
 		fetchLast10Posts(blogPostsElement, 10, 0);
 	}
 
-	// for single post page in post.html?id=xxx
 	const singleArticleContainer = document.getElementById("single-article");
 	const commentsContainer = document.getElementById("comments-container");
 	const commentsContainerTitle = document.getElementById(
@@ -294,14 +285,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		commentAuthorElement.classList.add("comment-author");
 		commentAuthorElement.innerHTML = comment.author_name;
 
-		// comment date
 		const commentDateElement = document.createElement("span");
 		commentDateElement.classList.add("comment-date");
 		commentDateElement.innerHTML = parseDate(comment.date);
 
 		commentAuthorElement.appendChild(commentDateElement);
 
-		// comment content
 		const commentContentElement = document.createElement("div");
 		commentContentElement.classList.add("comment-content");
 		commentContentElement.innerHTML = comment.content.rendered;
@@ -314,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	function fetchCommentsByPostID(id) {
 		let fetchURL =
-			"http://exam.local/wp-json/wp/v2/comments?post=" + id + "&_embed";
+			"http://salmankhoolia.local/wp-json/wp/v2/comments?post=" + id + "&_embed";
 
 		return fetch(fetchURL)
 			.then(function (response) {
@@ -338,7 +327,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	function fetchPostByID(id) {
 		let fetchURL =
-			"http://exam.local/wp-json/wp/v2/posts/" + id + "?_embed";
+			"http://salmankhoolia.local/wp-json/wp/v2/posts/" + id + "?_embed";
 
 		return fetch(fetchURL)
 			.then(function (response) {
@@ -360,9 +349,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		fetchCommentsByPostID(postId);
 	}
 
-	// coments for single posts
 	const commentForm = document.getElementById("commentForm");
-	//onsubmit event
 	commentForm?.addEventListener("submit", function (event) {
 		event.preventDefault();
 		const commentData = JSON.stringify({
@@ -371,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			author_email: commentForm.email.value,
 			content: commentForm.comment.value,
 		});
-		fetch("http://exam.local/wp-json/wp/v2/comments", {
+		fetch("http://salmankhoolia.local/wp-json/wp/v2/comments", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -383,12 +370,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			})
 			.then(function (comment) {
 				console.log(comment);
-				// clear form
 				commentForm.author.value = "";
 				commentForm.email.value = "";
 				commentForm.comment.value = "";
 
-				// update CommentsContainer
 				const commentElement = createCommentElement(comment);
 				commentsContainer.appendChild(commentElement);
 			})
@@ -396,4 +381,85 @@ document.addEventListener("DOMContentLoaded", function () {
 				console.log("Error creating comment:", error);
 			});
 	});
+});
+
+
+document.getElementById("subscription-form").addEventListener("submit", function(event) {
+	event.preventDefault();
+
+	var emailInput = document.getElementById("email-input");
+	var message = document.getElementById("subscription-message");
+
+	var email = emailInput.value.trim();
+
+	if (email === "") {
+	  return;
+	}
+
+	
+	emailInput.style.display = "none";
+	message.textContent = "Thanks for subscribing to us";
+  });
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var blogPostsElement = document.getElementById("blog-posts");
+    var seeMoreButton = document.getElementById("see-more");
+    var allPosts = [];
+    var displayCount = 3;
+
+    function displayBlogPosts(posts) {
+        blogPostsElement.innerHTML = "";
+
+        posts.forEach(function(post, index) {
+            var postElement = createPostElement(post);
+            blogPostsElement.appendChild(postElement);
+
+            if (index >= displayCount) {
+                postElement.style.display = "none";
+            }
+        });
+
+        if (posts.length > displayCount) {
+            seeMoreButton.style.display = "block";
+        } else {
+            seeMoreButton.style.display = "none";
+        }
+    }
+
+    function createPostElement(post) {
+        var postElement = document.createElement("div");
+        postElement.classList.add("post");
+
+        var titleElement = document.createElement("h2");
+        titleElement.textContent = post.title.rendered;
+
+        var contentElement = document.createElement("div");
+        contentElement.innerHTML = post.content.rendered;
+
+        postElement.appendChild(titleElement);
+        postElement.appendChild(contentElement);
+
+        return postElement;
+    }
+
+    function fetchBlogPosts() {
+        fetch("http://salmankhoolia.local/wp-json/wp/v2/posts")
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(posts) {
+                allPosts = posts;
+                displayBlogPosts(allPosts);
+            })
+            .catch(function(error) {
+                console.log("Error fetching blog posts:", error);
+            });
+    }
+
+    seeMoreButton.addEventListener("click", function() {
+        window.location.href = "./blog.html";
+    });
+
+    fetchBlogPosts();
 });

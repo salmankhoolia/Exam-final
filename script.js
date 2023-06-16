@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					<a href="post.html?id=${post.id}"> ${articleImg}</a>
 					<h3><a href="post.html?id=${post.id}">${post.title.rendered}</a></h3>
 					<div class="articleContent">${post.content.rendered}</div>
-					<div class="readMore"><a href="post.html?id=${post.id}">read more</a></div>
+					<div class="readMoreBlog"><a href="post.html?id=${post.id}">read more</a></div>
 				</article>
 			`;
 		});
@@ -396,7 +396,7 @@ document.getElementById("subscription-form").addEventListener("submit", function
 	  return;
 	}
 
-	
+
 	emailInput.style.display = "none";
 	message.textContent = "Thanks for subscribing to us";
   });

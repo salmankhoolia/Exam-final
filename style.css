@@ -319,8 +319,8 @@ footer {
 
 #blog-posts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-gap: 40px;
     cursor: pointer;
   }
 
@@ -440,7 +440,16 @@ footer {
 	color: var(--text-color);
 }
 
+.readMoreBlog a{
+	color: rgb(255, 255, 255);
+	background-color: var(--primary-color);
+	border: 1px solid black;
+	padding: 15px;
+}
 
+.post > * {
+	padding: 10px;
+}
 
 .post div {
 	margin: 15px;

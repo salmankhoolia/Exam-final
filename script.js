@@ -396,7 +396,7 @@ document.getElementById("subscription-form").addEventListener("submit", function
 	  return;
 	}
 
-	
+
 	emailInput.style.display = "none";
 	message.textContent = "Thanks for subscribing to us";
   });
